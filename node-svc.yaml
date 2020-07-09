@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: 2020-07-09T17:51:28Z
+  labels:
+    run: node-app
+  name: node-app
+  namespace: default
+  resourceVersion: "124865"
+  selfLink: /api/v1/namespaces/default/services/node-svc
+  uid: 39f824ab-361f-4931-a72e-bf68859772bb
+spec:
+  clusterIP: 10.103.81.111
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    run: node-app
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

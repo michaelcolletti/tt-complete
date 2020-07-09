@@ -1,0 +1,38 @@
+#apiVersion: v1
+#kind: Namespace
+##metadata:
+#  creationTimestamp: null
+#  name: mediaflow
+#spec: {}
+#status: {}
+#
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: kubectl run mongodb --image=legacywhisperer/mongodb-server
+      --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
+  creationTimestamp: null
+  labels:
+    run: mongodb
+  name: mongodb
+#  namespace: mediaflow
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: mongodb
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: mongodb
+    spec:
+      containers:
+      - image: legacywhisperer/mongodb-server
+        name: mongodb
+        resources: {}
+status: {}

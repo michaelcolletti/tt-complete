@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest
+      --namespace=mediaflow --dry-run=true --replicas=3 --restart=Always --record=true
+      --output=yaml
+  creationTimestamp: null
+  labels:
+    run: node-react-app
+  name: node-react-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: node-react-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: node-react-app
+        tier: backend
+    spec:
+      containers:
+      - image: legacywhisperer/node-app:latest
+        name: node-app
+      - image: legacywhisperer/react-app:latest
+        name: react-app
+        resources: {}
