@@ -4,12 +4,12 @@ metadata:
   creationTimestamp: null
   labels:
     run: node-react-app
-  name: node-svc
+  name: react-svc
 spec:
   ports:
-  - port: 3000
+  - port: 4100
     protocol: TCP
-    targetPort: 3000
+    targetPort: 4100
   selector:
     run: node-react-app
   type: ClusterIP
