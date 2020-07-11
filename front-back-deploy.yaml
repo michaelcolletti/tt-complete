@@ -28,3 +28,42 @@ spec:
       - image: legacywhisperer/react-app:latest
         name: react-app
         resources: {}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: node-react-app
+  name: node-svc
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    run: node-react-app
+    tier: frontend
+  type: ClusterIP
+status:
+  loadBalancer: {}
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: node-react-app
+    tier: frontend
+  name: react-svc
+spec:
+  ports:
+  - port: 4100
+    protocol: TCP
+    targetPort: 4100
+  selector:
+    run: node-react-app
+    tier: frontend
+  type: ClusterIP
+status:
+  loadBalancer: {}

@@ -35,4 +35,25 @@ spec:
       - image: legacywhisperer/mongodb-server
         name: mongodb
         resources: {}
-status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: mongodb
+    tier: backend
+  name: mongodb
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    run: mongodb
+    tier: backend 
+  type: NodePort
+status:
+  loadBalancer: {}
