@@ -2,9 +2,7 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest
-      --namespace=mediaflow --dry-run=true --replicas=3 --restart=Always --record=true
-      --output=yaml
+    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
     run: node-react-app
@@ -25,9 +23,14 @@ spec:
       containers:
       - image: legacywhisperer/node-app:latest
         name: node-app
+        env: 
+        - name: MONGODB_URI
+          value: mongodb
       - image: legacywhisperer/react-app:latest
         name: react-app
-        resources: {}
+        env: 
+        - name: API_ROOT
+          value: http://apiserver:3000/api
 ---
 
 apiVersion: v1
@@ -44,10 +47,13 @@ spec:
     targetPort: 3000
   selector:
     run: node-react-app
-    tier: frontend
+    tier: backend
   type: ClusterIP
 status:
   loadBalancer: {}
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
