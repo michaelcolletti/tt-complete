@@ -12,6 +12,7 @@ spec:
   selector:
     matchLabels:
       run: react-app
+      tier: frontend
   strategy: {}
   template:
     metadata:
@@ -42,13 +43,14 @@ metadata:
 spec:
   ports:
   - port: 4100
+    nodeport: 30100
     protocol: TCP
     targetPort: 4100
     NodePort: 
   selector:
     run: react-app
     tier: frontend
-  type: ClusterIP
+  type: NodePort
 status:
   loadBalancer: {}
 

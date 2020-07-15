@@ -1,6 +1,62 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+    tier: db
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+      tier: db
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mongodb
+        tier: db
+    spec:
+      containers:
+      - image: mongo
+        name: mongodb
+        env: 
+        - name: MONGODB_URI
+          value: 'mongodb://mongodb:27017'
+        - name: API_ROOT
+          value: 'http://node-svc:30000/api'
+        resources: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+    tier: db
+  name: mongodb
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: mongodb
+    tier: db
+  type: ClusterIP
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   annotations:
     kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
@@ -8,7 +64,7 @@ metadata:
     run: node-react-app
   name: node-react-app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       run: node-react-app
@@ -29,7 +85,7 @@ spec:
         name: react-app
         env: 
         - name: API_ROOT
-          value:  'https://conduit.productionready.io/api'
+          value:  'http://node-svc:30000/api'
 ---
 
 apiVersion: v1
@@ -70,4 +126,4 @@ spec:
   selector:
     run: react-svc
     tier: frontend
-  type: NodePort
+  type: LoadBalancer

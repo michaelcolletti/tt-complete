@@ -4,25 +4,30 @@ metadata:
   creationTimestamp: null
   labels:
     app: mongodb
+    tier: backend
   name: mongodb
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: mongodb
+      tier: backend
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
         app: mongodb
+        tier: backend
     spec:
       containers:
       - image: mongo
         name: mongodb
         env: 
         - name: MONGODB_URI
-          value: mongodb:27017
+          value: 'mongodb://mongodb:27017'
+        - name: API_ROOT
+          value: 'http://node-svc:30000/api'
         resources: {}
 status: {}
 
@@ -34,6 +39,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: mongodb
+    tier: backend
   name: mongodb
 spec:
   ports:
@@ -42,6 +48,7 @@ spec:
     targetPort: 27017
   selector:
     app: mongodb
+    tier: backend
   type: ClusterIP
 status:
   loadBalancer: {}
