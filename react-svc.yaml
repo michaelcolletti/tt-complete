@@ -3,15 +3,15 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: node-react-app
-  name: react-svc
+    app: react-app
+  name: react-app
 spec:
   ports:
   - port: 4100
     protocol: TCP
     targetPort: 4100
   selector:
-    run: node-react-app
-  type: ClusterIP
+    app: react-app
+  type: NodePort
 status:
   loadBalancer: {}

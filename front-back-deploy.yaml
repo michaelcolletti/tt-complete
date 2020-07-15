@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -18,19 +18,18 @@ spec:
       creationTimestamp: null
       labels:
         run: node-react-app
-        tier: backend
     spec:
       containers:
       - image: legacywhisperer/node-app:latest
         name: node-app
         env: 
         - name: MONGODB_URI
-          value: mongodb
+          value: mongodb:27017
       - image: legacywhisperer/react-app:latest
         name: react-app
         env: 
         - name: API_ROOT
-          value: http://apiserver:3000/api
+          value:  'https://conduit.productionready.io/api'
 ---
 
 apiVersion: v1
@@ -38,19 +37,17 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: node-react-app
+    run: node-svc
   name: node-svc
 spec:
   ports:
   - port: 3000
+    nodePort: 30000
     protocol: TCP
     targetPort: 3000
   selector:
-    run: node-react-app
-    tier: backend
-  type: ClusterIP
-status:
-  loadBalancer: {}
+    run: node-svc
+  type: NodePort
 
 ---
 
@@ -59,17 +56,14 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: node-react-app
-    tier: frontend
+    run: react-svc
   name: react-svc
 spec:
   ports:
   - port: 4100
     protocol: TCP
     targetPort: 4100
+    nodePort: 30001
   selector:
-    run: node-react-app
-    tier: frontend
-  type: ClusterIP
-status:
-  loadBalancer: {}
+    run: react-svc
+  type: NodePort

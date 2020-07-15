@@ -1,26 +1,47 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kubernetes.io/change-cause: kubectl run mongodb --image=legacywhisperer/mongodb-server
-      --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
-    run: mongodb
+    app: mongodb
   name: mongodb
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      run: mongodb
+      app: mongodb
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: mongodb
+        app: mongodb
     spec:
       containers:
-      - image: legacywhisperer/mongodb-server
+      - image: mongo
         name: mongodb
+        env: 
+        - name: MONGODB_URI
+          value: mongodb:27017
         resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+  name: mongodb
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: mongodb
+  type: ClusterIP
+status:
+  loadBalancer: {}

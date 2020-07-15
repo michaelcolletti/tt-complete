@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: promongo
+  name: promongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promongo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: promongo
+    spec:
+      containers:
+      - image: eses/mongodb_exporter
+        name: mongoexporter
+        resources: {}
+status: {}

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: react-app
+  name: react-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: react-app
+    spec:
+      containers:
+      - image: legacywhisperer/react-app:latest
+        name: react-app
+        env:
+        - name: MONGODB_URI
+          value: mongodb:27017
+        - name: API_ROOT
+          value: 'http://node-svc:30000'
+        resources: {}
+status: {}
