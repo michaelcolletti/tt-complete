@@ -126,4 +126,4 @@ spec:
   selector:
     run: react-svc
     tier: frontend
-  type: LoadBalancer
+  type: NodePort

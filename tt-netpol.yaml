@@ -13,12 +13,12 @@ spec:
   ingress:
   - from:
     - ipBlock:
-        cidr: 192.168.65.0/24
-        except:
-        - 172.17.1.0/24
+        cidr: 10.1.0.0/24
+#        except:
+#        - 172.17.1.0/24
     - podSelector:
         matchLabels:
-          role: frontend
+          role: backend
     ports:
     - protocol: TCP
       port: 27017
@@ -29,3 +29,7 @@ spec:
     ports:
     - protocol: TCP
       port: 3000
+    - protocol: TCP
+      port: 30100
+    - protocol: TCP
+      port: 4100
