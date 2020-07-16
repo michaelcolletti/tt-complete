@@ -27,11 +27,11 @@ spec:
           - containerPort: 27017
         env: 
         - name: MONGODB_URI
-          value: 'mongodb://mongodb@localhost:27017'
+          value: 'mongodb://mongodb@mongodb:27017/conduit'
         - name: API_ROOT
           value: 'http://node-svc:30000/api'
         volumeMounts:
-        - mountPath: "/data/db"
+        - mountPath: "/data"
           name: pv-mongo
       volumes:
       - name: pv-mongo
@@ -90,7 +90,7 @@ spec:
         name: node-app
         env: 
         - name: MONGODB_URI
-          value: mongodb://mongodb@localhost:27017
+          value: mongodb://mongodb@localhost:27017/conduit
       - image: legacywhisperer/react-app:latest
         name: react-app
         env: 
