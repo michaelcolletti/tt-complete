@@ -33,3 +33,5 @@ spec:
       port: 30100
     - protocol: TCP
       port: 4100
+    - protocol: TCP
+      port: 30100
