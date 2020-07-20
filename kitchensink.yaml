@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: mongodb
-    tier: db
+    tier: backend
   name: mongodb
 spec:
   replicas: 1
@@ -27,9 +27,9 @@ spec:
           - containerPort: 27017
         env: 
         - name: MONGODB_URI
-          value: 'mongodb://mongodb@mongodb:27017/conduit'
+          value: mongodb://mongodb/conduit
         - name: API_ROOT
-          value: 'http://node-svc:30000/api'
+          value: http://node-svc:30000/api
         volumeMounts:
         - mountPath: "/data"
           name: pv-mongo
@@ -73,7 +73,7 @@ metadata:
     tier: backend
   name: node-react-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       run: node-react-app
@@ -90,7 +90,7 @@ spec:
         name: node-app
         env: 
         - name: MONGODB_URI
-          value: mongodb://mongodb@localhost:27017/conduit
+          value: 'mongodb://mongodb/conduit'
       - image: legacywhisperer/react-app:latest
         name: react-app
         env: 
