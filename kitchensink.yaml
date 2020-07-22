@@ -6,6 +6,7 @@ metadata:
     app: mongodb
     tier: backend
   name: mongodb
+  namespace: mediaflow
 spec:
   replicas: 1
   selector:
@@ -48,6 +49,7 @@ metadata:
     app: mongosvc
     tier: backend
   name: mongosvc
+  namespace: mediaflow
 spec:
   ports:
   - port: 27017
@@ -72,6 +74,7 @@ metadata:
     run: node-react
     tier: frontend
   name: node-react
+  namespace: mediaflow
 spec:
   replicas: 3
   selector:
@@ -110,6 +113,7 @@ metadata:
     run: node-svc
     tier: frontend
   name: node-svc
+  namespace: mediaflow
 spec:
   ports:
   - port: 3000
@@ -131,6 +135,7 @@ metadata:
     run: react-svc
     tier: frontend
   name: react-svc
+  namespace: mediaflow
 spec:
   ports:
   - port: 4100

@@ -4,10 +4,10 @@ metadata:
   name: pv-mongo-aws
   namespace: mediaflow
   labels:
-    type: cloud
+    type: volume
     tier: backend
 spec:
-  storageClassName: standard
+  storageClassName: gp2
   capacity:
     storage: 5Gi
   accessModes:
