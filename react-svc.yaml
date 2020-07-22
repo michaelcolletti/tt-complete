@@ -10,6 +10,7 @@ spec:
   - port: 4100
     protocol: TCP
     targetPort: 4100
+    NodePort: 30100
   selector:
     app: react-app
   type: NodePort

@@ -1,0 +1,476 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: 2020-07-17T21:05:29Z
+    generateName: mongodb-6c4b8d747b-
+    labels:
+      app: mongodb
+      pod-template-hash: 6c4b8d747b
+      tier: backend
+    name: mongodb-6c4b8d747b-8rrxp
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: mongodb-6c4b8d747b
+      uid: 9d5bcad0-e096-4d75-9667-3e2b0253d73c
+    resourceVersion: "64138"
+    selfLink: /api/v1/namespaces/default/pods/mongodb-6c4b8d747b-8rrxp
+    uid: 1e096426-1364-4d81-a0f5-6e0ea8ab5e33
+  spec:
+    containers:
+    - env:
+      - name: MONGODB_URI
+        value: mongodb://mongodb/conduit
+      - name: API_ROOT
+        value: http://node-svc:30000/api
+      image: mongo
+      imagePullPolicy: Always
+      name: mongodb
+      ports:
+      - containerPort: 27017
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /data
+        name: pv-mongo
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: docker-desktop
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: pv-mongo
+      persistentVolumeClaim:
+        claimName: pvc-mongo
+    - name: default-token-gfvdd
+      secret:
+        defaultMode: 420
+        secretName: default-token-gfvdd
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:32Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:32Z
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://79220260621c3e000c58433225c0d374758b1bced71164172cbec29ab98f1ec4
+      image: mongo:latest
+      imageID: docker-pullable://mongo@sha256:6d09cb4a2abbf0b333aa7e4f69c74d17699eeabf17f20a2265453bc8d1c1f5ac
+      lastState: {}
+      name: mongodb
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:31Z
+    hostIP: 192.168.65.3
+    phase: Running
+    podIP: 10.1.0.14
+    podIPs:
+    - ip: 10.1.0.14
+    qosClass: BestEffort
+    startTime: 2020-07-17T21:05:29Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: 2020-07-17T21:05:29Z
+    generateName: node-react-app-85f9d67b84-
+    labels:
+      pod-template-hash: 85f9d67b84
+      run: node-react-app
+      tier: backend
+    name: node-react-app-85f9d67b84-l5z7f
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: node-react-app-85f9d67b84
+      uid: 35a51d9a-c952-416b-b16e-84bb22b4ebe6
+    resourceVersion: "64176"
+    selfLink: /api/v1/namespaces/default/pods/node-react-app-85f9d67b84-l5z7f
+    uid: 61b0dc13-ea6f-43a8-aee1-5ae1e05e91cb
+  spec:
+    containers:
+    - env:
+      - name: MONGODB_URI
+        value: mongodb://mongodb/conduit
+      image: legacywhisperer/node-app:latest
+      imagePullPolicy: Always
+      name: node-app
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    - env:
+      - name: API_ROOT
+        value: http://node-svc:30000/api
+      image: legacywhisperer/react-app:latest
+      imagePullPolicy: Always
+      name: react-app
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: docker-desktop
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: default-token-gfvdd
+      secret:
+        defaultMode: 420
+        secretName: default-token-gfvdd
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:35Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:35Z
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://cf9b2d88bbf172d0e3f71e5d4b107c06e94c8fc2b3054d61b93600a669394ebf
+      image: legacywhisperer/node-app:latest
+      imageID: docker-pullable://legacywhisperer/node-app@sha256:5cdcdd22a71af9c669a628ffd145907abef30b8aeb34fcbcf23ca1ba9bd952de
+      lastState: {}
+      name: node-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:33Z
+    - containerID: docker://97e3fab932de555d90132beab54db5654a1810a1ebb03b01c509d4cc1f88d277
+      image: legacywhisperer/react-app:latest
+      imageID: docker-pullable://legacywhisperer/react-app@sha256:2b1d3439bd57e13b3968d59f9934d2d92acfe5b2cd9a64765b506189e14c2ffc
+      lastState: {}
+      name: react-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:35Z
+    hostIP: 192.168.65.3
+    phase: Running
+    podIP: 10.1.0.17
+    podIPs:
+    - ip: 10.1.0.17
+    qosClass: BestEffort
+    startTime: 2020-07-17T21:05:29Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: 2020-07-17T21:05:29Z
+    generateName: node-react-app-85f9d67b84-
+    labels:
+      pod-template-hash: 85f9d67b84
+      run: node-react-app
+      tier: backend
+    name: node-react-app-85f9d67b84-lqbq8
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: node-react-app-85f9d67b84
+      uid: 35a51d9a-c952-416b-b16e-84bb22b4ebe6
+    resourceVersion: "64166"
+    selfLink: /api/v1/namespaces/default/pods/node-react-app-85f9d67b84-lqbq8
+    uid: c01368b9-bfcd-47b3-96af-1877a5a11af8
+  spec:
+    containers:
+    - env:
+      - name: MONGODB_URI
+        value: mongodb://mongodb/conduit
+      image: legacywhisperer/node-app:latest
+      imagePullPolicy: Always
+      name: node-app
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    - env:
+      - name: API_ROOT
+        value: http://node-svc:30000/api
+      image: legacywhisperer/react-app:latest
+      imagePullPolicy: Always
+      name: react-app
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: docker-desktop
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: default-token-gfvdd
+      secret:
+        defaultMode: 420
+        secretName: default-token-gfvdd
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:34Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:34Z
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://2a009cacb6f08afdc1c3247231c65e7693f779188ee25bbddf4b4624d6cc4dd7
+      image: legacywhisperer/node-app:latest
+      imageID: docker-pullable://legacywhisperer/node-app@sha256:5cdcdd22a71af9c669a628ffd145907abef30b8aeb34fcbcf23ca1ba9bd952de
+      lastState: {}
+      name: node-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:31Z
+    - containerID: docker://cd9e51bd977d3a9a82f6ff72571ad43831739417dca24ff7055f37e57443b881
+      image: legacywhisperer/react-app:latest
+      imageID: docker-pullable://legacywhisperer/react-app@sha256:2b1d3439bd57e13b3968d59f9934d2d92acfe5b2cd9a64765b506189e14c2ffc
+      lastState: {}
+      name: react-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:33Z
+    hostIP: 192.168.65.3
+    phase: Running
+    podIP: 10.1.0.15
+    podIPs:
+    - ip: 10.1.0.15
+    qosClass: BestEffort
+    startTime: 2020-07-17T21:05:29Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: 2020-07-17T21:05:29Z
+    generateName: node-react-app-85f9d67b84-
+    labels:
+      pod-template-hash: 85f9d67b84
+      run: node-react-app
+      tier: backend
+    name: node-react-app-85f9d67b84-qnxdx
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: node-react-app-85f9d67b84
+      uid: 35a51d9a-c952-416b-b16e-84bb22b4ebe6
+    resourceVersion: "64175"
+    selfLink: /api/v1/namespaces/default/pods/node-react-app-85f9d67b84-qnxdx
+    uid: 19eebef0-94cc-46f3-bd32-33ce41004fa1
+  spec:
+    containers:
+    - env:
+      - name: MONGODB_URI
+        value: mongodb://mongodb/conduit
+      image: legacywhisperer/node-app:latest
+      imagePullPolicy: Always
+      name: node-app
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    - env:
+      - name: API_ROOT
+        value: http://node-svc:30000/api
+      image: legacywhisperer/react-app:latest
+      imagePullPolicy: Always
+      name: react-app
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-gfvdd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: docker-desktop
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: default-token-gfvdd
+      secret:
+        defaultMode: 420
+        secretName: default-token-gfvdd
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:35Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:35Z
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2020-07-17T21:05:29Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://c116104d6dbcb6cfb95a0ee12529cc2048fca01967528854e08fabf70989531e
+      image: legacywhisperer/node-app:latest
+      imageID: docker-pullable://legacywhisperer/node-app@sha256:5cdcdd22a71af9c669a628ffd145907abef30b8aeb34fcbcf23ca1ba9bd952de
+      lastState: {}
+      name: node-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:32Z
+    - containerID: docker://a57e49f3de1fe6741a63d7a240741a11f86e6c46318089a5e2d6a0e9b74eb0c5
+      image: legacywhisperer/react-app:latest
+      imageID: docker-pullable://legacywhisperer/react-app@sha256:2b1d3439bd57e13b3968d59f9934d2d92acfe5b2cd9a64765b506189e14c2ffc
+      lastState: {}
+      name: react-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: 2020-07-17T21:05:34Z
+    hostIP: 192.168.65.3
+    phase: Running
+    podIP: 10.1.0.16
+    podIPs:
+    - ip: 10.1.0.16
+    qosClass: BestEffort
+    startTime: 2020-07-17T21:05:29Z
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongo-express
+  name: mongo-express
+#  namespace: mediaflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+      - image: mongo-express:latest
+        name: mongo-express
+        resources: {}
+status: {}

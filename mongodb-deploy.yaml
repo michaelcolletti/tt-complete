@@ -22,10 +22,10 @@ spec:
     spec:
       containers:
       - image: mongo
-        name: mongodb
+        name: mongosvc
         env: 
         - name: MONGODB_URI
-          value: 'mongodb://mongodb:27017'
+          value: 'mongodb://mongosvc/conduit'
         - name: API_ROOT
           value: 'http://node-svc:30000/api'
         resources: {}
@@ -38,16 +38,16 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: mongodb
+    app: mongosvc
     tier: backend
-  name: mongodb
+  name: mongosvc
 spec:
   ports:
   - port: 27017
     protocol: TCP
     targetPort: 27017
   selector:
-    app: mongodb
+    app: mongosvc
     tier: backend
   type: ClusterIP
 status:

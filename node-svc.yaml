@@ -27,4 +27,4 @@ spec:
 status:
   loadBalancer:
     ingress:
-    - hostname: localhost
+    - hostname: react-app

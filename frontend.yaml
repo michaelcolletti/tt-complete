@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -28,29 +28,4 @@ spec:
         - name: API_ROOT
           value: 'http://apiserver.default:3000/api'
         - name: MONGO_URI
-          value: 'mongodb:27017'
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    run: react-app
-    tier: frontend
-  name: apiserver
-spec:
-  ports:
-  - port: 4100
-    nodeport: 30100
-    protocol: TCP
-    targetPort: 4100
-    NodePort: 
-  selector:
-    run: react-app
-    tier: frontend
-  type: NodePort
-status:
-  loadBalancer: {}
-
+          value: 'mongodb://mongodb/conduit'

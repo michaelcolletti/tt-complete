@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -9,7 +9,7 @@ metadata:
     tier: backend
   name: node-app
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       run: node-app
@@ -29,7 +29,7 @@ spec:
         - name: API_ROOT
           value: 'http://apiserver.default:3000/api'
         - name: MONGO_URI
-          value: 'mongodb:27017'
+          value: 'mongodb://mongodb/conduit'
 ---
 
 apiVersion: v1
@@ -48,7 +48,7 @@ spec:
   selector:
     run: node-app
     tier: backend
-  type: ClusterIP
+  type: NodePort
 status:
   loadBalancer: {}
 

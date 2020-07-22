@@ -27,7 +27,7 @@ spec:
           - containerPort: 27017
         env: 
         - name: MONGODB_URI
-          value: mongodb://mongodb/conduit
+          value: mongodb://mongosvc:27017/conduit
         - name: API_ROOT
           value: http://node-svc:30000/api
         volumeMounts:
@@ -45,16 +45,16 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: mongodb
+    app: mongosvc
     tier: backend
-  name: mongodb
+  name: mongosvc
 spec:
   ports:
   - port: 27017
     protocol: TCP
     targetPort: 27017
   selector:
-    app: mongodb
+    app: mongosvc
     tier: backend
   type: ClusterIP
 status:
@@ -69,33 +69,37 @@ metadata:
     kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
-    run: node-react-app
-    tier: backend
-  name: node-react-app
+    run: node-react
+    tier: frontend
+  name: node-react
 spec:
   replicas: 3
   selector:
     matchLabels:
-      run: node-react-app
+      run: node-react
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: node-react-app
+        run: node-react
         tier: backend
     spec:
       containers:
       - image: legacywhisperer/node-app:latest
         name: node-app
+        ports: 
+          - containerPort: 3000
         env: 
         - name: MONGODB_URI
-          value: 'mongodb://mongodb/conduit'
+          value: 'mongodb://mongosvc/conduit'
       - image: legacywhisperer/react-app:latest
         name: react-app
+        ports: 
+          - containerPort: 4100
         env: 
         - name: API_ROOT
-          value:  'http://node-svc:30000/api'
+          value:  'http://node-svc:3000/api'
 ---
 
 apiVersion: v1
@@ -104,7 +108,7 @@ metadata:
   creationTimestamp: null
   labels:
     run: node-svc
-    tier: backend
+    tier: frontend
   name: node-svc
 spec:
   ports:
@@ -114,7 +118,7 @@ spec:
     targetPort: 3000
   selector:
     run: node-svc
-    tier: backend
+    tier: frontend
   type: NodePort
 
 ---
