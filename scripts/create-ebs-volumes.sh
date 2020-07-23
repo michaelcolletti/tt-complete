@@ -3,14 +3,17 @@
 ##
 
 az=us-east-1a 
-voltypeDB=nitro
-voltypeMON=gp2
+voltypeIO1=io1
+voltypeST1=st1
+voltypeGP2=gp2
 voltypeLOG=standard
-sizeDB=40
-sizeMON=50
+sizeIO1=20
+sizeST1=500
+sizeGP2=20
 sizeLOG=50
 
-aws ec2 create-volume --availability-zone $az --size $sizeDB --volume-type $voltypeDB 
-aws ec2 create-volume --availability-zone $az --size $sizeMON --volume-type $voltypeMON
+aws ec2 create-volume --availability-zone $az --size $sizeIO1 --volume-type $voltypeIO1
+aws ec2 create-volume --availability-zone $az --size $sizeST1 --volume-type $voltypeST1
+aws ec2 create-volume --availability-zone $az --size $sizeGP2 --volume-type $voltypeGP2
 aws ec2 create-volume --availability-zone $az --size $sizeLOG --volume-type $voltypeLOG
 #--multi-attach-enabled 

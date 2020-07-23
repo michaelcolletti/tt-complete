@@ -5,6 +5,7 @@ metadata:
   labels:
     app: promongo
   name: promongo
+  namespace: mediaflow
 spec:
   replicas: 1
   selector:
