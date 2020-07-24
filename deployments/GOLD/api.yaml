@@ -1,0 +1,59 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
+  creationTimestamp: null
+  labels:
+    run: nodeapp
+    tier: api
+  name: node
+  namespace: mediaflow
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: nodeapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: nodeapp
+        tier: api
+    spec:
+      containers:
+      - image: legacywhisperer/node-app:latest
+        name: node-app
+        ports: 
+          - containerPort: 3000
+        env: 
+        - name: MONGODB_URI
+          value: 'mongodb://mongosvc:27017/conduit'
+        env: 
+        - name: API_ROOT
+          value:  'http://node-svc:3000/api'
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nodesvc
+    tier: api
+  name: nodesvc
+  namespace: mediaflow
+spec:
+  ports:
+  - port: 3000
+    nodePort: 30000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    run: nodesvc
+    tier: frontend
+  type: NodePort
+

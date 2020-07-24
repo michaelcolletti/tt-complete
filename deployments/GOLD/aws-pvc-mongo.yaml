@@ -6,9 +6,9 @@ metadata:
   labels: 
     tier: backend
 spec:
-  storageClassName: gp2
+  storageClassName: backend-storage-class
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 10Gi

@@ -29,6 +29,7 @@ spec:
       labels:
         app: mongodb
         tier: backend
+        class: ssd
     spec:
       containers:
       - image: mongo
@@ -47,7 +48,7 @@ spec:
       - name: aws-pv-mongo
         persistentVolumeClaim:
           claimName: aws-pvc-mongo
-
+      
 ---
 
 apiVersion: v1
@@ -60,6 +61,7 @@ metadata:
   name: mongosvc
   namespace: mediaflow
 spec:
+  type: ClusterIP
   ports:
   - port: 27017
     protocol: TCP
@@ -67,7 +69,6 @@ spec:
   selector:
     app: mongosvc
     tier: backend
-  type: NodePort
 
 ---
 

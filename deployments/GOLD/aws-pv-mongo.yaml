@@ -4,17 +4,18 @@ metadata:
   name: aws-pv-mongo
   namespace: mediaflow
   labels:
-    type: gp2
     tier: backend
+    type: backend-storage-class
 spec:
-  storageClassName: gp2
+  storageClassName: backend-storage-class
   capacity:
-    storage: 20Gi
+    storage: 10Gi
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
+# dynamic allocation via sc above
   awsElasticBlockStore:
-    volumeID: 
-    fsType: xfs
-
+    fsType: ext4
+    volumeID: vol-07a9fa3a6e911267f
+#
 #  hostPath:
 #    path: "/tmp/data"

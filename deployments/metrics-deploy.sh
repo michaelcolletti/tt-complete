@@ -8,6 +8,7 @@ kubectl get deployment metrics-server -n kube-system
 printf "Dashboard Deploy \n"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
 
+printf "Apply the clusterrole service account \n"
 kubectl apply -f eks-admin-service-account.yaml
 
 printf "Token for proxied kube dash login \n"

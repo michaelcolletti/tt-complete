@@ -4,11 +4,10 @@ metadata:
   name: pv-mon-aws
   namespace: mediaflow
   labels:
-    type: ebs
     tier: admin
 spec:
-  storageClassName: gp2
+  storageClassName: standard
   capacity:
-    storage: 30Gi
+    storage: 500Gi
   accessModes:
     - ReadWriteMany
