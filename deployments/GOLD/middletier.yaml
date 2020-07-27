@@ -7,26 +7,25 @@ metadata:
     kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
-    run: node
+    run: node-prod
     tier: api
-  name: node
+  name: node-prod
   namespace: mediaflow
 spec:
   replicas: 3
   selector:
     matchLabels:
-      run: node
-      tier: api
+      run: node-prod
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: node
+        run: node-prod
         tier: api
     spec:
       containers:
-      - image: legacywhisperer/node-app:latest
+      - image: legacywhisperer/node:prod
         name: node-app
         ports: 
           - containerPort: 3000
@@ -38,16 +37,7 @@ spec:
           value:  http://nodesvc:3000/api
         - name: NODE_ENV
           value:  production
-# Liveness 
-        ports:
-        - name: liveness-port
-          containerPort: 3000
-          hostPort: 3000
 
-        livenessProbe:
-          httpGet:
-            path: /api
-            port: liveness-port
 ---
 
 apiVersion: v1

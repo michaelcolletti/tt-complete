@@ -2,10 +2,12 @@ apiVersion: snapshot.storage.k8s.io/v1beta1
 kind: VolumeSnapshot
 metadata:
   name: mediaflow-snapshots
+  namespace: mediaflow
 spec:
   volumeSnapshotClassName: csi-hostpath-snapclass-mongo
   source:
     persistentVolumeClaimName: aws-pvc-mongo
-  volumeSnapshotClassName: csi-hostpath-snapclass-monlog
-  source:
-    persistentVolumeClaimName: aws-pvc-monlog
+
+#  volumeSnapshotClassName: csi-hostpath-snapclass-monlog
+#  source:
+#    persistentVolumeClaimName: aws-pvc-monlog

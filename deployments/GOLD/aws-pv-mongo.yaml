@@ -15,7 +15,9 @@ spec:
 # dynamic allocation via sc above
   awsElasticBlockStore:
     fsType: ext4
-    volumeID: vol-07a9fa3a6e911267f
+    volumeID: vol-0e4f07f1975be574a
 #
 #  hostPath:
 #    path: "/tmp/data"
+# 
+# USED PRIOR TO Dynamic Provisioning
