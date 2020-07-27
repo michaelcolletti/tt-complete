@@ -1,0 +1,156 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: mediaflow
+spec: {}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+    tier: backend
+  name: mongodb
+  namespace: mediaflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+      tier: backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mongodb
+        tier: backend
+        class: ssd
+    spec:
+      containers:
+      - image: mongo
+        name: mongodb
+        ports: 
+          - containerPort: 27017
+        env: 
+        - name: MONGODB_URI
+          value: mongodb://mongosvc:27017/conduit
+        - name: API_ROOT
+          value: http://node-svc:30000/api
+        volumeMounts:
+        - mountPath: "/data"
+          name: aws-pv-mongo
+      volumes:
+      - name: aws-pv-mongo
+        persistentVolumeClaim:
+          claimName: aws-pvc-mongo
+      
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongosvc
+    tier: backend
+  name: mongosvc
+  namespace: mediaflow
+spec:
+  type: ClusterIP
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: mongosvc
+    tier: backend
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
+  creationTimestamp: null
+  labels:
+    run: node-react
+    tier: frontend
+  name: node-react
+  namespace: mediaflow
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: node-react
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: node-react
+        tier: backend
+    spec:
+      containers:
+      - image: legacywhisperer/node-app:latest
+        name: node-app
+        ports: 
+          - containerPort: 3000
+        env: 
+        - name: MONGODB_URI
+          value: 'mongodb://mongosvc/conduit'
+      - image: legacywhisperer/react-app:latest
+        name: react-app
+        ports: 
+          - containerPort: 4100
+        env: 
+        - name: API_ROOT
+          value:  'http://node-svc:3000/api'
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: node-svc
+    tier: frontend
+  name: node-svc
+  namespace: mediaflow
+spec:
+  ports:
+  - port: 3000
+    nodePort: 30000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    run: node-svc
+    tier: frontend
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: react-svc
+    tier: frontend
+  name: react-svc
+  namespace: mediaflow
+spec:
+  ports:
+  - port: 4100
+    protocol: TCP
+    targetPort: 4100
+    nodePort: 30100
+  selector:
+    run: react-svc
+    tier: frontend
+  type: NodePort

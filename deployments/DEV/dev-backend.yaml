@@ -1,0 +1,65 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: dev-mongodb
+    tier: backend
+  name: dev-mongodb
+  namespace: mediaflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dev-mongodb
+      tier: backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: dev-mongodb
+        tier: backend
+    spec:
+      containers:
+      - image: mongo
+        name: dev-mongodb
+        ports: 
+          - containerPort: 27017
+        env: 
+        - name: MONGODB_URI
+          value: mongodb://mongosvc/conduit
+        - name: API_ROOT
+          value: http://nodesvc:30000/api
+        volumeMounts:
+        - mountPath: "/data"
+          name: dev-pv-mongo
+      volumes:
+      - name: dev-pv-mongo
+        persistentVolumeClaim:
+          claimName: dev-pvc-mongo
+      
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongodb
+    tier: backend
+  name: mongosvc
+  namespace: mediaflow
+spec:
+  type: NodePort
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+    nodePort: 30017
+  selector:
+    app: mongodb
+    tier: backend
+

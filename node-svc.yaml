@@ -13,7 +13,7 @@ metadata:
   selfLink: /api/v1/namespaces/default/services/node-app
   uid: ae8987e9-0f6c-470a-80d9-2a2dc3f39057
 spec:
-  clusterIP: 10.101.235.164
+  clusterIP: 
   externalTrafficPolicy: Cluster
   ports:
   - nodePort: 30000

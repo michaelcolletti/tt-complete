@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
+  creationTimestamp: null
+  labels:
+    run: react
+    tier: frontend
+  name: react
+  namespace: mediaflow
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: react
+      tier: frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: react
+        tier: frontend
+    spec:
+      containers:
+      - image: legacywhisperer/react-app:latest
+        name: react
+        ports: 
+          - containerPort: 4100
+        env: 
+        - name: MONGODB_URI
+          value: 'mongodb://mongosvc:27017/conduit'
+        - name: API_ROOT
+          value:  'http://nodesvc:3000/api'
+# Put liveness probes here
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: reactsvc
+    tier: frontend
+  name: reactsvc
+  namespace: mediaflow
+spec:
+  ports:
+  - port: 4100
+    protocol: TCP
+    targetPort: 4100
+    nodePort: 30100
+  selector:
+    run: reactsvc
+    tier: frontend
+  type: LoadBalancer
