@@ -19,15 +19,21 @@ spec:
 #        - 172.17.1.0/24
     - podSelector:
         matchLabels:
-          tier: api
+          tier: frontend
     ports:
     - protocol: TCP
       port: 3000
+      port: 30000
+      port: 30100
+      port: 4100
 
   egress:
   - to:
 #    - ipBlock:
 #       cidr: 10.1.0.0/16
+    - podSelector:
+        matchLabels:
+          tier: api
     ports:
     - protocol: TCP
       port: 3000

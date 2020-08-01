@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
+    kubernetes.io/ingress.class: alb
+#    kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
     run: react
@@ -30,13 +31,15 @@ spec:
           - containerPort: 4100
         env: 
         - name: MONGODB_URI
-          value: 'mongodb://mongosvc:27017/conduit'
+          value: 'mongodb://mongosvc:30017/conduit'
         - name: API_ROOT
-          value:  'http://nodesvc:3000/api'
+          value:  'http://nodesvc:30000/api'
+        - name: APIURL
+          value:  'http://nodesvc:30000/api'
 # Put liveness probes here
 
 ---
-
+# service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 apiVersion: v1
 kind: Service
 metadata:
@@ -50,7 +53,7 @@ spec:
   ports:
   - port: 4100
     protocol: TCP
-    targetPort: 4100
+    targetPort: 30100
     nodePort: 30100
   selector:
     run: reactsvc

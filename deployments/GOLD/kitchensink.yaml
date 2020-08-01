@@ -1,9 +1,9 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  creationTimestamp: null
-  name: mediaflow
-spec: {}
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  creationTimestamp: null
+#  name: mediaflow
+#spec: {}
 
 ---
 
@@ -17,7 +17,7 @@ metadata:
   name: mongodb
   namespace: mediaflow
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mongodb
@@ -29,7 +29,7 @@ spec:
       labels:
         app: mongodb
         tier: backend
-        class: ssd
+        class: backend-storage
     spec:
       containers:
       - image: mongo
@@ -40,7 +40,9 @@ spec:
         - name: MONGODB_URI
           value: mongodb://mongosvc:27017/conduit
         - name: API_ROOT
-          value: http://node-svc:30000/api
+          value: http://nodesvc:30000/api
+        - name: APIURL
+          value: http://nodesvc:30000/api
         volumeMounts:
         - mountPath: "/data"
           name: aws-pv-mongo
@@ -94,7 +96,7 @@ spec:
       creationTimestamp: null
       labels:
         run: node-react
-        tier: backend
+        tier: frontend
     spec:
       containers:
       - image: legacywhisperer/node-app:latest
@@ -103,14 +105,22 @@ spec:
           - containerPort: 3000
         env: 
         - name: MONGODB_URI
-          value: 'mongodb://mongosvc/conduit'
+          value: mongodb://mongodb@mongodb/conduit
+        - name: API_ROOT
+          value: http://nodesvc:30000/api
+        - name: APIURL
+          value: http://nodesvc:30000/api
       - image: legacywhisperer/react-app:latest
         name: react-app
         ports: 
           - containerPort: 4100
         env: 
+        - name: MONGODB_URI
+          value: mongodb://mongosvc/conduit
         - name: API_ROOT
-          value:  'http://node-svc:3000/api'
+          value: http://nodesvc:30000/api
+        - name: APIURL
+          value: http://nodesvc:300000/api
 ---
 
 apiVersion: v1
@@ -118,9 +128,9 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: node-svc
+    run: nodesvc
     tier: frontend
-  name: node-svc
+  name: nodesvc
   namespace: mediaflow
 spec:
   ports:
@@ -129,7 +139,7 @@ spec:
     protocol: TCP
     targetPort: 3000
   selector:
-    run: node-svc
+    run: nodesvc
     tier: frontend
   type: NodePort
 
@@ -140,17 +150,16 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: react-svc
+    run: reactsvc
     tier: frontend
-  name: react-svc
+  name: reactsvc
   namespace: mediaflow
 spec:
   ports:
-  - port: 4100
+  - port: 80
     protocol: TCP
     targetPort: 4100
-    nodePort: 30100
   selector:
-    run: react-svc
+    run: reactsvc
     tier: frontend
-  type: NodePort
+  type: LoadBalancer

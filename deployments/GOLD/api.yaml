@@ -12,7 +12,7 @@ metadata:
   name: node
   namespace: mediaflow
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       run: node
@@ -32,24 +32,28 @@ spec:
           - containerPort: 3000
         env: 
         - name: MONGODB_URI
-          value: mongodb://mongodb/conduit
+          value: mongodb://mongodb:27017/conduit
         env: 
         - name: API_ROOT
-          value:  http://nodesvc:3000/api
+          value:  http://nodesvc:30000/api
         - name: NODE_ENV
           value:  production
+        - name: APIURL
+          value:  http://nodesvc:30000/api 
+        - name: SECRET
+          value: secret
 # Liveness 
-        ports:
-        - name: liveness-port
-          containerPort: 3000
-          hostPort: 3000
-
-        livenessProbe:
-          httpGet:
-            path: /api
-            port: liveness-port
----
-
+#        ports:
+#        - name: liveness-port
+#          containerPort: 3000
+#          hostPort: 3000
+#
+#        livenessProbe:
+#          httpGet:
+#            path: /api
+#            port: liveness-port
+#---
+#
 apiVersion: v1
 kind: Service
 metadata:
@@ -63,10 +67,10 @@ spec:
   ports:
   - port: 3000
     protocol: TCP
-    targetPort: 3000
     nodePort: 30000
   selector:
     run: node
+    tier: api
   type: NodePort
 status:
   loadBalancer: {}

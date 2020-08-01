@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    kubernetes.io/ingress.class: alb
+  creationTimestamp: 2020-07-30T00:05:26Z
+  generation: 1
+  labels:
+    run: react
+    tier: frontend
+  name: react
+  namespace: mediaflow
+  resourceVersion: "20992"
+  selfLink: /apis/apps/v1/namespaces/mediaflow/deployments/react
+  uid: 5314ef5d-70e1-49b9-a765-4178602c49d9
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      run: react
+      tier: frontend
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: react
+        tier: frontend
+    spec:
+      containers:
+      - env:
+        - name: API_ROOT
+          value: http://nodesvc:30000/api
+        - name: APIURL
+          value: http://nodesvc:30000/api
+        image: legacywhisperer/react-app:latest
+        imagePullPolicy: Always
+        name: react
+        ports:
+        - containerPort: 4100
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 3
+  conditions:
+  - lastTransitionTime: 2020-07-30T00:05:47Z
+    lastUpdateTime: 2020-07-30T00:05:47Z
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: 2020-07-30T00:05:26Z
+    lastUpdateTime: 2020-07-30T00:05:47Z
+    message: ReplicaSet "react-59d8869b5c" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 1
+  readyReplicas: 3
+  replicas: 3
+  updatedReplicas: 3
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: react
+    tier: frontend
+  name: reactsvc
+  namespace: mediaflow
+spec:
+  ports:
+  - port: 4100
+    protocol: TCP
+    targetPort: 4100
+  selector:
+    run: react
+    tier: frontend
+  type: LoadBalancer
+status:
+  loadBalancer: {}

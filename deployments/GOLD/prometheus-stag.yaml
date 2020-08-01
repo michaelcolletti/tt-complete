@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    tier: monitor
+    run: prometheus
+  name: prometheus
+  namespace: mediaflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: monitor
+      run: prometheus
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: prometheus
+        tier: monitor
+    spec:
+      containers:
+      - image: prom/prometheus 
+        name: prometheus
+        ports: 
+          - containerPort: 9090
+          - containerPort: 9091
+          - containerPort: 9093
+          - containerPort: 9000
+        env: 
+        - name: PROM_URI
+          value: mongodb://mongosvc:27017/conduit
+        - name: PROM_ROOT
+          value: http://nodesvc:30000/api
+        volumeMounts:
+        - mountPath: "/data"
+          name: aws-pv-logdata
+      volumes:
+      - name: aws-pv-logdata
+        persistentVolumeClaim:
+          claimName: aws-pvc-logdata
+      
+

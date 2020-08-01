@@ -6,33 +6,37 @@ metadata:
   creationTimestamp: null
   labels:
     tier: backend
-    run: mongodb
-  name: mongodb
+    run: mongo
+  name: mongo
   namespace: mediaflow
 spec:
   replicas: 1
   selector:
     matchLabels:
       tier: backend
-      run: mongodb
+      run: mongo
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: mongodb
+        run: mongo
         tier: backend
     spec:
       containers:
-      - image: mongo
+      - image: legacywhisperer/mongodb-server:latest
         name: mongodb
         ports: 
           - containerPort: 27017
         env: 
         - name: MONGODB_URI
-          value: mongodb://mongosvc/conduit
+          value: mongodb://mongosvc:30017/conduit
         - name: API_ROOT
           value: http://nodesvc:30000/api
+        - name: APIURL
+          value: http://nodesvc:30000/api
+        - name: SECRET
+          value: secret
         volumeMounts:
         - mountPath: "/data"
           name: aws-pv-mongo
@@ -48,7 +52,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: mongodb
+    run: mongosvc
     tier: backend
   name: mongosvc
   namespace: mediaflow
@@ -56,10 +60,9 @@ spec:
   type: NodePort
   ports:
   - port: 27017
-    protocol: TCP
     targetPort: 27017
+    protocol: TCP
     nodePort: 30017
   selector:
-    app: mongodb
+    app: mongosvc
     tier: backend
-

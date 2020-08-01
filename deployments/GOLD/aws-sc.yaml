@@ -14,6 +14,19 @@ volumeBindingMode: Immediate
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
+ name: ssd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
   name: standard
 provisioner: kubernetes.io/aws-ebs
 parameters:
@@ -24,20 +37,20 @@ mountOptions:
   - debug
 volumeBindingMode: Immediate
 #----
-#apiVersion: storage.k8s.io/v1
-#kind: StorageClass
-#metadata:
-#  name: io1
-#provisioner: kubernetes.io/aws-ebs
-#parameters:
-#  type: io1
-#  iopsPerGB: "100"
-#reclaimPolicy: Retain
-#allowVolumeExpansion: true
-#mountOptions:
-#  - debug
-#volumeBindingMode: Immediate
-#
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: io1
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  iopsPerGB: "100"
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+
 ---
 
 apiVersion: storage.k8s.io/v1
