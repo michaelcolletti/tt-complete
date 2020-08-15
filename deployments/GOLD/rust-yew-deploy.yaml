@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: rustyew
+    tier: frontend
+  name: rustyew
+  namespace: mediaflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rustyew
+      tier: frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: rustyew
+        tier: frontend
+    spec:
+      containers:
+      - image: legacywhisperer/rust-yew-app:latest
+        name: rustyew
+        resources: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: rustyew
+    tier: frontend
+  name: rustsvc
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: rustyew
+    tier: frontend
+  type: LoadBalancer
+status:
+  loadBalancer: {}

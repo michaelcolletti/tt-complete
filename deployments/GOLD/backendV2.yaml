@@ -1,5 +1,3 @@
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,7 +28,7 @@ spec:
           - containerPort: 27017
         env: 
         - name: MONGODB_URI
-          value: mongodb+srv://mongosvc:30017
+          value: mongodb://mongosvc:30017
         - name: API_ROOT
           value: http://nodesvc:30000/api
         - name: APIURL

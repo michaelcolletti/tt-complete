@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: rustyew
+  name: rustyew
+  namespace: mediaflow
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rustyew
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: rustyew
+    spec:
+      containers:
+      - image: legacywhisperer/rustyew:1
+        name: rustyew
+        resources: {}
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: rustyew
+  name: frontsvc
+  namespace: mediaflow
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+    nodePort: 30800
+  selector:
+    app: rustyew
+  type: LoadBalancer
+status:
+  loadBalancer: {}
