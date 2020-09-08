@@ -1,5 +1,3 @@
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,22 +5,22 @@ metadata:
     kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
-    run: node
+    run: node-app
     tier: api
-  name: node
+  name: node-app
   namespace: mediaflow
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: node
+      run: node-app
       tier: api
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: node
+        run: node-app
         tier: api
     spec:
       containers:
@@ -32,16 +30,15 @@ spec:
           - containerPort: 3000
         env: 
         - name: MONGODB_URI
-          value: mongodb://mongodb:27017/conduit
-        env: 
-        - name: API_ROOT
-          value:  http://nodesvc:30000/api
+          value: 'mongodb://mongodb:27017/conduit'
+        - name: APIROOT
+          value:  'http://nodesvc:30000/api'
         - name: NODE_ENV
           value:  production
         - name: APIURL
-          value:  http://nodesvc:30000/api 
-        - name: SECRET
-          value: secret
+          value:  'http://nodesvc:30000/api'
+        - name: PORT
+          value: '3000'
 # Liveness 
 #        ports:
 #        - name: liveness-port
@@ -59,7 +56,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: node
+    run: node-app
     tier: api
   name: nodesvc
   namespace: mediaflow
@@ -69,8 +66,6 @@ spec:
     protocol: TCP
     nodePort: 30000
   selector:
-    run: node
+    run: node-app
     tier: api
   type: NodePort
-status:
-  loadBalancer: {}

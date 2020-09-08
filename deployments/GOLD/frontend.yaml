@@ -25,17 +25,19 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: legacywhisperer/react-app:latest
+      - image: legacywhisperer/react-app:prod
         name: react
         ports: 
           - containerPort: 4100
         env: 
-        - name: MONGODB_URI
-          value: 'mongodb://mongosvc:30017/conduit'
         - name: API_ROOT
-          value:  'http://nodesvc:30000/api'
+          value:  'https://conduit.productionready.io/api'
+#        - name: API_ROOT
+#          value:  'http://nodesvc:30000/api'
         - name: APIURL
-          value:  'http://nodesvc:30000/api'
+          value:  'https://conduit.productionready.io/api'
+        - name: PORT
+          value:  '4100'
 # Put liveness probes here
 
 ---
@@ -53,7 +55,7 @@ spec:
   ports:
   - port: 4100
     protocol: TCP
-    targetPort: 30100
+    targetPort: 4100
     nodePort: 30100
   selector:
     run: reactsvc

@@ -23,15 +23,15 @@ spec:
         tier: api
     spec:
       containers:
-      - image: legacywhisperer/node-app
+      - image: legacywhisperer/node-app:latest
         name: node-prod
         env:
+        - name: PORT
+          value:  '3000'
         - name: API_ROOT
           value:  'http://nodesvc:30000/api'
         - name: API_URL
           value:  'http://nodesvc:30000/api'
-        - name: SECRET
-          value:  secret
         - name: NODE_ENV
           value:  'production'
         - name: APIURL

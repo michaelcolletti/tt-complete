@@ -5,39 +5,39 @@ metadata:
     kubernetes.io/change-cause: kubectl run node-app --image=legacywhisperer/node-app:latest --dry-run=true --replicas=3 --restart=Always --record=true --output=yaml
   creationTimestamp: null
   labels:
-    run: node-prod
+    run: node
     tier: api
-  name: node-prod
+  name: node
   namespace: mediaflow
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      run: node-prod
+      run: node
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: node-prod
+        run: node
         tier: api
     spec:
       containers:
-      - image: legacywhisperer/node-app
-        name: node-prod
+      - image: legacywhisperer/node-app:qa
+        name: node
         env:
         - name: API_ROOT
           value:  'http://nodesvc:30000/api'
-        - name: API_URL
+        - name: APIURL
           value:  'http://nodesvc:30000/api'
-        - name: SECRET
-          value:  secret
         - name: NODE_ENV
           value:  'production'
-        - name: APIURL
+        - name: API_URL
           value:  'http://nodesvc:30000/api'
         - name: MONGODB_URI
           value: 'mongodb://mongosvc:30017/conduit'
+        - name: PORT
+          value:  '3000'
         ports: 
           - containerPort: 3000
            

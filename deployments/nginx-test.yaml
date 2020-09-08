@@ -3,23 +3,23 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: mongo-express
-  name: mongo-express
+    app: nginx
+  name: nginx
   namespace: mediaflow
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-express
+      app: nginx
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: mongo-express
+        app: nginx
     spec:
       containers:
-      - image: mongo-express:latest
-        name: mongo-express
+      - image: nginx
+        name: nginx
         resources: {}
 status: {}
